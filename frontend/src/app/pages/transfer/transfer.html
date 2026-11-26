@@ -1,0 +1,89 @@
+<h1 class="page-title">Payments</h1>
+<p class="page-subtitle">Deposit, withdraw or transfer money between accounts.</p>
+
+@if (successMessage()) {
+  <div class="alert alert-success">{{ successMessage() }}</div>
+}
+@if (errorText()) {
+  <div class="alert alert-error">{{ errorText() }}</div>
+}
+
+<div class="grid-2">
+  <div class="card">
+    <div class="tabs">
+      @for (op of operations; track op.value) {
+        <button type="button" class="tab" [class.active]="operation() === op.value" (click)="selectOperation(op.value)">
+          {{ op.label }}
+        </button>
+      }
+    </div>
+
+    @if (accounts().length === 0) {
+      <p class="muted">There are no accounts yet. Open one on the Accounts page first.</p>
+    } @else {
+      <form #paymentForm="ngForm" (ngSubmit)="submit()">
+        @if (operation() === 'transfer') {
+          <div class="form-group">
+            <label for="from">From account</label>
+            <select id="from" name="from" required [(ngModel)]="fromAccountId">
+              @for (a of accounts(); track a.id) {
+                <option [ngValue]="a.id">{{ a.accountNumber }} - {{ a.ownerName }}</option>
+              }
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="to">To account</label>
+            <select id="to" name="to" required [(ngModel)]="toAccountId">
+              @for (a of accounts(); track a.id) {
+                <option [ngValue]="a.id">{{ a.accountNumber }} - {{ a.ownerName }}</option>
+              }
+            </select>
+          </div>
+        } @else {
+          <div class="form-group">
+            <label for="account">Account</label>
+            <select id="account" name="account" required [(ngModel)]="accountId">
+              @for (a of accounts(); track a.id) {
+                <option [ngValue]="a.id">{{ a.accountNumber }} - {{ a.ownerName }}</option>
+              }
+            </select>
+          </div>
+        }
+
+        <div class="form-group">
+          <label for="amount">Amount (kr)</label>
+          <input id="amount" name="amount" type="number" required min="0.01" step="0.01"
+                 [(ngModel)]="amount" placeholder="0.00" />
+        </div>
+
+        <button type="submit" class="btn btn-primary" [disabled]="paymentForm.invalid || saving()">
+          Confirm {{ operation() }}
+        </button>
+      </form>
+    }
+  </div>
+
+  <div class="card">
+    <h2>Balances</h2>
+    @if (accounts().length === 0) {
+      <p class="muted">No accounts yet.</p>
+    } @else {
+      <div class="table-wrapper">
+        <table class="table">
+          <thead>
+            <tr><th>Account</th><th>Holder</th><th class="amount">Balance</th></tr>
+          </thead>
+          <tbody>
+            @for (a of accounts(); track a.id) {
+              <tr>
+                <td>{{ a.accountNumber }}</td>
+                <td>{{ a.ownerName }}</td>
+                <td class="amount">{{ a.balance | number: '1.2-2' }} kr</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </div>
+</div>

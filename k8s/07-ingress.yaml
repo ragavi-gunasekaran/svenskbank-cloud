@@ -1,0 +1,19 @@
+# Single entry point from outside the cluster. Everything goes to the frontend (nginx),
+# which serves the web pages and forwards /api/* calls to the right microservice.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: svenskbank
+  namespace: svenskbank
+spec:
+  ingressClassName: nginx
+  rules:
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend
+                port:
+                  number: 8080

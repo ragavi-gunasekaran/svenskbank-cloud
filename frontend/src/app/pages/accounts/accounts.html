@@ -1,0 +1,87 @@
+<h1 class="page-title">Accounts</h1>
+<p class="page-subtitle">Open a new account or look at the balance and history of an existing one.</p>
+
+@if (successMessage()) {
+  <div class="alert alert-success">{{ successMessage() }}</div>
+}
+@if (errorText()) {
+  <div class="alert alert-error">{{ errorText() }}</div>
+}
+
+<div class="grid-2">
+  <div class="card">
+    <h2>Open a new account</h2>
+    <form #accountForm="ngForm" (ngSubmit)="createAccount()">
+      <div class="form-group">
+        <label for="ownerName">Account holder name</label>
+        <input id="ownerName" name="ownerName" type="text" required maxlength="100"
+               [(ngModel)]="ownerName" placeholder="e.g. Anna Andersson" />
+      </div>
+      <div class="form-group">
+        <label for="initialDeposit">First deposit (kr, optional)</label>
+        <input id="initialDeposit" name="initialDeposit" type="number" min="0" step="0.01"
+               [(ngModel)]="initialDeposit" placeholder="0.00" />
+      </div>
+      <button type="submit" class="btn btn-primary" [disabled]="accountForm.invalid || saving()">
+        Open account
+      </button>
+    </form>
+  </div>
+
+  <div class="card">
+    <h2>All accounts</h2>
+    @if (accounts().length === 0) {
+      <p class="muted">No accounts yet. Open the first one using the form.</p>
+    } @else {
+      <div class="table-wrapper">
+        <table class="table">
+          <thead>
+            <tr><th>Account</th><th>Holder</th><th class="amount">Balance</th><th></th></tr>
+          </thead>
+          <tbody>
+            @for (account of accounts(); track account.id) {
+              <tr [class.selected]="selected()?.id === account.id">
+                <td>{{ account.accountNumber }}</td>
+                <td>{{ account.ownerName }}</td>
+                <td class="amount">{{ account.balance | number: '1.2-2' }} kr</td>
+                <td>
+                  <button type="button" class="btn btn-secondary btn-small" (click)="showHistory(account)">
+                    History
+                  </button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </div>
+</div>
+
+@if (selected(); as account) {
+  <div class="card">
+    <h2>History for {{ account.accountNumber }} ({{ account.ownerName }})</h2>
+    @if (history().length === 0) {
+      <p class="muted">No transactions yet for this account.</p>
+    } @else {
+      <div class="table-wrapper">
+        <table class="table">
+          <thead>
+            <tr><th>Date</th><th>Type</th><th>From</th><th>To</th><th class="amount">Amount</th></tr>
+          </thead>
+          <tbody>
+            @for (t of history(); track t.id) {
+              <tr>
+                <td>{{ t.createdAt | date: 'yyyy-MM-dd HH:mm' }}</td>
+                <td>{{ t.type }}</td>
+                <td>{{ accountNumber(t.fromAccountId) }}</td>
+                <td>{{ accountNumber(t.toAccountId) }}</td>
+                <td class="amount">{{ t.amount | number: '1.2-2' }} kr</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </div>
+}

@@ -1,0 +1,40 @@
+<h1 class="page-title">About SvenskBank</h1>
+<p class="page-subtitle">Our purpose and how the application is built.</p>
+
+<div class="card">
+  <h2>Our purpose</h2>
+  <p>
+    SvenskBank is a small banking application built as a study project in cloud computing.
+    Its purpose is to show how a real-world style application can be split into independent
+    microservices that run on Kubernetes, scale on their own and keep their data safe in a
+    persistent database.
+  </p>
+</div>
+
+<div class="card">
+  <h2>What you can do</h2>
+  <ul>
+    <li>Open a new bank account with an optional first deposit</li>
+    <li>See all accounts and their balances</li>
+    <li>Deposit and withdraw money</li>
+    <li>Transfer money between two accounts</li>
+    <li>View the transaction history of an account</li>
+  </ul>
+</div>
+
+<div class="card">
+  <h2>How it is built</h2>
+  <div class="table-wrapper">
+    <table class="table">
+      <thead>
+        <tr><th>Microservice</th><th>Technology</th><th>Responsibility</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>frontend</td><td>Angular + nginx</td><td>The web pages you see, and forwarding API calls to the right service</td></tr>
+        <tr><td>account-service</td><td>Java, Spring Boot</td><td>Creates accounts and keeps track of balances</td></tr>
+        <tr><td>transaction-service</td><td>Java, Spring Boot</td><td>Deposits, withdrawals, transfers and history</td></tr>
+        <tr><td>database</td><td>PostgreSQL</td><td>Stores all data on persistent storage</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>

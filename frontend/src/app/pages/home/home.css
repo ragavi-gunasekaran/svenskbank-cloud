@@ -1,0 +1,34 @@
+.hero {
+  background: var(--sb-blue);
+  color: var(--sb-white);
+  border-radius: var(--sb-radius);
+  border-left: 8px solid var(--sb-yellow);
+  padding: 2.5rem 2rem;
+  margin-bottom: 2rem;
+}
+
+.hero h1 {
+  margin: 0 0 0.75rem;
+  font-size: 2rem;
+}
+
+.hero p {
+  margin: 0 0 1.5rem;
+  max-width: 640px;
+  font-size: 1.1rem;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.hero-secondary {
+  color: var(--sb-white);
+  border-color: var(--sb-white);
+}
+
+.hero-secondary:hover { background: var(--sb-blue-dark) !important; }
+
+.features .card { margin-bottom: 0; }

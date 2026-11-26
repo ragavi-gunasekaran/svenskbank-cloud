@@ -1,0 +1,11 @@
+# Runs once, the first time the database volume is created.
+# accountdb is created by POSTGRES_DB; this adds a separate database for transaction-service
+# (database-per-service pattern on a single PostgreSQL server).
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-init
+  namespace: svenskbank
+data:
+  01-create-databases.sql: |
+    CREATE DATABASE transactiondb;

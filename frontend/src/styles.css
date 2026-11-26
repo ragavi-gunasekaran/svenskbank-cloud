@@ -1,0 +1,164 @@
+/* SvenskBank theme: blue + yellow */
+:root {
+  --sb-blue: #006aa7;
+  --sb-blue-dark: #004f7c;
+  --sb-blue-light: #e6f0f7;
+  --sb-yellow: #fecc00;
+  --sb-yellow-dark: #e6b800;
+  --sb-bg: #f4f7fa;
+  --sb-white: #ffffff;
+  --sb-text: #1f2933;
+  --sb-muted: #5f6b7a;
+  --sb-border: #d9e2ec;
+  --sb-success-bg: #e3f6e8;
+  --sb-success-text: #1e6b34;
+  --sb-error-bg: #fde8e8;
+  --sb-error-text: #9b1c1c;
+  --sb-radius: 8px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--sb-bg);
+  color: var(--sb-text);
+  font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+a { color: var(--sb-blue); }
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+.page-title {
+  color: var(--sb-blue-dark);
+  margin: 0 0 0.25rem;
+  font-size: 1.75rem;
+}
+
+.page-subtitle {
+  color: var(--sb-muted);
+  margin: 0 0 1.5rem;
+}
+
+/* Cards */
+.card {
+  background: var(--sb-white);
+  border: 1px solid var(--sb-border);
+  border-top: 4px solid var(--sb-blue);
+  border-radius: var(--sb-radius);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.card h2 {
+  margin-top: 0;
+  color: var(--sb-blue-dark);
+  font-size: 1.2rem;
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+/* Buttons */
+.btn {
+  display: inline-block;
+  padding: 0.6rem 1.2rem;
+  border-radius: var(--sb-radius);
+  border: 2px solid transparent;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--sb-yellow);
+  color: var(--sb-blue-dark);
+}
+
+.btn-primary:hover:not(:disabled) { background: var(--sb-yellow-dark); }
+
+.btn-secondary {
+  background: transparent;
+  color: var(--sb-blue);
+  border-color: var(--sb-blue);
+}
+
+.btn-secondary:hover:not(:disabled) { background: var(--sb-blue-light); }
+
+.btn-small { padding: 0.3rem 0.7rem; font-size: 0.875rem; }
+
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* Forms */
+.form-group { margin-bottom: 1rem; }
+
+.form-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid var(--sb-border);
+  border-radius: var(--sb-radius);
+  font-size: 1rem;
+  background: var(--sb-white);
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: 2px solid var(--sb-yellow);
+  border-color: var(--sb-blue);
+}
+
+/* Tables */
+.table-wrapper { overflow-x: auto; }
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th {
+  text-align: left;
+  background: var(--sb-blue-light);
+  color: var(--sb-blue-dark);
+  padding: 0.6rem;
+}
+
+.table td {
+  padding: 0.6rem;
+  border-bottom: 1px solid var(--sb-border);
+}
+
+.table tr.selected td { background: #fff8d6; }
+
+.amount { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+/* Messages */
+.alert {
+  padding: 0.75rem 1rem;
+  border-radius: var(--sb-radius);
+  margin-bottom: 1rem;
+}
+
+.alert-success { background: var(--sb-success-bg); color: var(--sb-success-text); }
+.alert-error { background: var(--sb-error-bg); color: var(--sb-error-text); }
+
+.muted { color: var(--sb-muted); }

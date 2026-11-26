@@ -1,0 +1,79 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: transaction-service
+  namespace: svenskbank
+  labels:
+    app: transaction-service
+spec:
+  selector:
+    app: transaction-service
+  ports:
+    - port: 8082
+      targetPort: 8082
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: transaction-service
+  namespace: svenskbank
+spec:
+  replicas: 2                      # stateless -> can be scaled horizontally on its own
+  selector:
+    matchLabels:
+      app: transaction-service
+  template:
+    metadata:
+      labels:
+        app: transaction-service
+    spec:
+      securityContext:
+        runAsNonRoot: true
+      # Wait until PostgreSQL accepts connections before starting the Java app
+      initContainers:
+        - name: wait-for-postgres
+          image: postgres:16-alpine
+          command: ["sh", "-c", "until pg_isready -h postgres -p 5432; do echo waiting for postgres; sleep 2; done"]
+          securityContext:
+            runAsUser: 70
+            allowPrivilegeEscalation: false
+          resources:
+            requests: { cpu: 10m, memory: 16Mi }
+            limits: { cpu: 100m, memory: 64Mi }
+      containers:
+        - name: transaction-service
+          image: gragavig/svenskbank-transaction-service:1.1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8082
+          env:
+            - name: DB_HOST
+              value: postgres
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_NAME
+              value: transactiondb
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef: { name: postgres-credentials, key: username }
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef: { name: postgres-credentials, key: password }
+            - name: ACCOUNT_SERVICE_URL
+              value: http://account-service:8081
+          securityContext:
+            allowPrivilegeEscalation: false
+          # Spring Boot needs some seconds to start; the startup probe gives it up to ~2.5 min
+          startupProbe:
+            httpGet: { path: /actuator/health/liveness, port: 8082 }
+            periodSeconds: 5
+            failureThreshold: 30
+          readinessProbe:
+            httpGet: { path: /actuator/health/readiness, port: 8082 }
+            periodSeconds: 10
+          livenessProbe:
+            httpGet: { path: /actuator/health/liveness, port: 8082 }
+            periodSeconds: 15
+          resources:
+            requests: { cpu: 200m, memory: 256Mi }
+            limits: { cpu: "1", memory: 512Mi }

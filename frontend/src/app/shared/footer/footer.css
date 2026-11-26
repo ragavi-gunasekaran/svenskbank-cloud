@@ -1,0 +1,15 @@
+.footer {
+  background: var(--sb-blue-dark);
+  color: var(--sb-blue-light);
+  border-top: 4px solid var(--sb-yellow);
+  font-size: 0.9rem;
+}
+
+.footer-inner {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
